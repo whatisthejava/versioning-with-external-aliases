@@ -177,6 +177,22 @@ and the following methods
 		return JsonConvert.SerializeObject(this);
 	}
 ````
+The other model is in project StorageRepository 
+The StorageModel.cs is outlined below 
+
+````
+    public class StorageModel
+    {
+        public string Id { get; set; }
+        public string Contents { get; set; }
+        public int VersionOfContents { get; set; }
+	}
+	
+````
+This model has three atributes. 
+Id - The unique id of the model 
+The Contents - The ProcessSchema model is serialized using JSON and written here.  Wrapping it in the StorageModel allows us more flexibility when reading and writing
+VersionOfContents - The version of the schema 
 
 
 
@@ -233,6 +249,8 @@ appsettings.json
 A MVC test app has been created to demonstrate the API.
 
 The MVC has a V1 page.  If the V1 Page is loaded it has the ability to use the latest controller or the v1 controller 
+The MVC has a V2 page.  If the V2 Page is loaded it has the ability to use the latest controller or the v2 controller 
+
 
 ## Running the App
 Download the code 
