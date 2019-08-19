@@ -16,6 +16,14 @@ Its a simple web api project which sets up
 API versioning
 Swagger endpoints 
 
+## Behavioural Differences in V2
+The ProcessSchemas object has been changed in a simple way 
+````
+	public string Id { get; set; }   // From V1 
+	public string Title { get; set; }//From V1 
+	public string Owner = "Default Owner added to V2";  //New attribute  added with default value 
+	public string Version = "v2";  // Update the version 
+````
 
 ## Changes from V1 
 We have now added the following projects
@@ -25,6 +33,10 @@ We have now added the following projects
 *  v2Models.Test 
   * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v2Schemas.
+*  Aliases
+	* Add an aliase to reference v1Models 
+	* Add a reference to v2Models
+		* In the reference to v1Models add an Alias calling it v2Schemas.		
 
 
 And add the following  classes 
