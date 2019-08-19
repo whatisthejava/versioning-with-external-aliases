@@ -1,0 +1,111 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "V6";
+}
+
+
+<script>
+
+    function getContentsOfBodyLatest() {
+        var str = "{  \"id\": \"" + $("#id").val() + "\", \"title\": \"" + $("#title").val() + "\", \"owner\": \"" + $("#owner").val() + "\", \"purpose\": \"" + $("#purpose").val() + "\", \"actorCollection\": [{ \"ActorName\": { \"FirstName\": \"" + $("#actor-fname").val() + "\", \"LastName\": \"" + $("#actor-lname").val() + "\" }, \"Role\": \"" + $("#actor-role").val() + "\" }]} ";
+        console.log(str);
+        return str;
+    }
+
+    function getContentsOfBodyVersion() {
+
+        var str = "{  \"id\": \"" + $("#id-2").val() + "\", \"title\": \"" + $("#title-2").val() + "\", \"owner\": \"" + $("#owner-2").val() + "\", \"purpose\": \"" + $("#purpose-2").val() + "\", \"actorCollection\": [{ \"ActorName\": { \"FirstName\": \"" + $("#actor-fname-2").val() + "\", \"LastName\": \"" + $("#actor-lname-2").val() + "\" }, \"Role\": \"" + $("#actor-role-2").val() + "\" }]} ";
+        console.log(str);
+        return str;
+    }
+
+
+    var latestAPI = 'https://localhost:44376/api/processes';
+    var versionedApi = 'https://localhost:44376/api/v6/processes';
+
+</script>
+
+<div class="text-center">
+    <h1 class="display-4">V6 (ProcessSchema) </h1>
+    <p>
+        This is the sixth iteration of the object<br />
+        We have changed the internal structure of the actors object 
+
+        This IS considered a breaking change
+        <br />
+    </p>
+
+    <div class="col-md-12 row">
+        <div class="shadow border col-md-4">
+
+            <p class="display-4">API latest </p>
+
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Get By Id" onclick="get(latestAPI, '6', true, '#id-to-request')" /></div>
+                    <div class="col-md-8"><input type="text" id="id-to-request" name="id-to-request" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="GetAll" onclick="getAll(latestAPI, '6', true)" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Write" onclick="writeX(latestAPI, '6', true, getContentsOfBodyLatest)" /></div>
+                    <div class=" col-md-8">&nbsp;</div>
+                    <div class=" col-md-8"><input type="text" id="id" name="id" placeholder="id" /></div>
+                    <div class=" col-md-8"><input type="text" id="title" name="title" placeholder="title" /></div>
+                    <div class=" col-md-8"><input type="text" id="owner" name="owner" placeholder="owner" /></div>
+                    <div class=" col-md-8"><input type="text" id="purpose" name="purpose" placeholder="purpose" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-fname" name="actor-fname" placeholder="Actor First Name" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-lname" name="actor-lname" placeholder="Actor Last Name" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-role" name="actor-role" placeholder="Actor Role" /></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="shadow border col-md-4">
+            <pre id="result" name="result" class="text-left"></pre>
+        </div>
+
+
+        <p></p>
+
+        <div class="shadow border col-md-4">
+
+            <p class="display-4">API V6</p>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Get By Id" onclick="get(versionedApi, null, false, '#id-to-request-2')" /></div>
+                    <div class="col-md-8"><input type="text" id="id-to-request-2" name="id-to-request" /></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="GetAll" onclick="getAll(versionedApi, null, false)" /></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Write" onclick="writeX(versionedApi, null, false, getContentsOfBodyVersion)" /></div>
+                    <div class=" col-md-8">&nbsp;</div>
+                    <div class=" col-md-8"><input type="text" id="id-2" name="id-2" placeholder="id" /></div>
+                    <div class=" col-md-8"><input type="text" id="title-2" name="title-2" placeholder="title" /></div>
+                    <div class=" col-md-8"><input type="text" id="owner-2" name="owner-2" placeholder="owner" /></div>
+                    <div class=" col-md-8"><input type="text" id="purpose-2" name="purpose-2" placeholder="purpose" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-fname-2" name="actor-fname-2" placeholder="Actor First Name" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-lname-2" name="actor-lname-2" placeholder="Actor Last Name" /></div>
+                    <div class=" col-md-8"><input type="text" id="actor-role-2" name="actor-role-2" placeholder="Actor Role" /></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/calls.js"></script>
