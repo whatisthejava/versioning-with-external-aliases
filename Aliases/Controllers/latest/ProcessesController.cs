@@ -1,4 +1,5 @@
-﻿extern alias v2Schemas;
+﻿extern alias v3Schemas;
+extern alias v2Schemas;
 extern alias v1Schemas;
 
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,7 @@ using Microsoft.Extensions.Options;
 using StorageRepository;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using v2Schemas::Schemas;
+using v3Schemas::Schemas;
 
 namespace Aliases.Controllers.latest
 {
