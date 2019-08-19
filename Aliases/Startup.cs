@@ -50,6 +50,7 @@ namespace Aliases
                 c.SwaggerDoc("v3.0", new Info { Version = "v3.0", Title = "V3", Description = "V3 Endpoints", TermsOfService = "None", Contact = contact });
                 c.SwaggerDoc("v4.0", new Info { Version = "v4.0", Title = "V4", Description = "V4 Endpoints", TermsOfService = "None", Contact = contact });
                 c.SwaggerDoc("v5.0", new Info { Version = "v5.0", Title = "V5", Description = "V5 Endpoints", TermsOfService = "None", Contact = contact });
+                c.SwaggerDoc("v6.0", new Info { Version = "v6.0", Title = "V6", Description = "V6 Endpoints", TermsOfService = "None", Contact = contact });
 
 
 
@@ -89,7 +90,7 @@ namespace Aliases
         {
             services.AddApiVersioning(o =>
             {
-                o.DefaultApiVersion = new ApiVersion(5, 0); 
+                o.DefaultApiVersion = new ApiVersion(6, 0); 
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.ReportApiVersions = true;
                 o.ApiVersionReader = new RouteApiReader();
@@ -122,7 +123,8 @@ namespace Aliases
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v4.0/swagger.json", "V5");
+                c.SwaggerEndpoint("/swagger/v6.0/swagger.json", "V6");
+                c.SwaggerEndpoint("/swagger/v5.0/swagger.json", "V5");
                 c.SwaggerEndpoint("/swagger/v4.0/swagger.json", "V4");
                 c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3");
                 c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2");
