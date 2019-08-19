@@ -46,7 +46,7 @@ namespace Aliases
 
 
                 c.SwaggerDoc("v1.0", new Info { Version = "v1.0", Title = "V1", Description = "V1 Endpoints", TermsOfService = "None", Contact = contact });
-                c.SwaggerDoc("v2.0", new Info { Version = "v2.0", Title = "V2", Description = "V1 Endpoints", TermsOfService = "None", Contact = contact });
+                c.SwaggerDoc("v2.0", new Info { Version = "v2.0", Title = "V2", Description = "V2 Endpoints", TermsOfService = "None", Contact = contact });
 
 
                 c.DocInclusionPredicate((docName, apiDesc) =>
@@ -105,9 +105,10 @@ namespace Aliases
             }
 
             app.UseHttpsRedirection();
-            app.UseCors("AllowAll");
             AddSwagger(app);
 
+            app.UseCors("AllowAll");
+            
 
             app.UseMvc();
         }
