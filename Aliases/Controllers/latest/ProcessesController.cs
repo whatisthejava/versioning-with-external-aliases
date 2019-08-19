@@ -44,6 +44,12 @@ namespace Aliases.Controllers.latest
             return Redirect($"/api/v{CurrentVersionOfApiToMapTo}/processes/{id}");
         }
 
+
+        /// <summary>
+        /// The reason this accepts a jsonResult is if in future we change the schema significantly we need to be able to still accept this version of the schema 
+        /// </summary>
+        /// <param name="jsonResult"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult LatestWrite([FromBody] JObject jsonResult)
         {
