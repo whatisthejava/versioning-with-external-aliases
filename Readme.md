@@ -19,12 +19,6 @@ Swagger endpoints
 ## Behavioural Differences in V4
 The ProcessSchemas object has been changed to have a new collection of objects.
 ````
-	public string Id { get; set; }   // From V1 
-	public string Title { get; set; }//From V1 
-	public string Owner = { get; set; }//From V2
-	public string Purpose = "Default Purpose added to V3";  //New attribute  added with default value 
-	public string Version = "v3";  // Update the version 
-	
 	public string Id { get; set; }  // From V1 
 	public string Title { get; set; }  // From V1
 	public string Owner { get; set; }  // From V2
@@ -68,7 +62,7 @@ And add the following changes
 	* In ConfigureApiVersioning
 		* Update default version from 3.0 to 4.0
    * In AddSwagger 
-	   * Preappend   new c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3"); to line 123
+	   * Preappend   new c.SwaggerEndpoint("/swagger/v4.0/swagger.json", "V4"); to line 123
 		
 
 Add External Aliases 
@@ -161,6 +155,7 @@ To do this we implement the following methods in the ProcessSchema.
                 this.Id = schema.Id;
                 this.Title = schema.Title;
                 this.Owner = schema.Owner;
+                this.Purpose = schema.Purpose;
             }
             else
             {
@@ -168,9 +163,11 @@ To do this we implement the following methods in the ProcessSchema.
                 this.Id = previousSchema.Id;
                 this.Title = previousSchema.Title;
                 this.Owner = previousSchema.Owner;
+                this.Purpose = previousSchema.Purpose;
             }
 
-            this.Purpose = schema.Purpose;
+            // Lists and versions need to be done afterwards
+            this.Actors = schema.Actors != null ? schema.Actors : new List<Actor>();
             this.Version = schema.Version;
         }
 
@@ -179,9 +176,9 @@ To do this we implement the following methods in the ProcessSchema.
 	/// Using external aliases i can convert this object into the previous verison 
 	/// </summary>
 	/// <returns></returns>
-        public v2Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
+         public v3Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
         {
-            return new v2Schemas.Schemas.ProcessSchema(schema);
+            return new v3Schemas.Schemas.ProcessSchema(schema);
         }
 
 ````
