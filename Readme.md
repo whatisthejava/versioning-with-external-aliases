@@ -9,28 +9,31 @@ This git repo has been written to demonstrate a strategy for model versioning wi
 The project has been set up to allow v1 clients to continue using older API's without being forced to update.  
 The models and the latest controller will allow older clients to continue to use the older API without being forced to update. 
 
-This version is v5. 
+This version is v6. 
 
 Its a simple web api project which sets up 
 
 API versioning
 Swagger endpoints 
 
-## Behavioural Differences in V5
-The ProcessSchemas object has changed the internal collection name from actors to actorCollections.  
+## Behavioural Differences in V6
+The ProcessSchemas object has not changed but the Actors collection has changed .  
 
 ````
-	public string Id { get; set; }  // From V1 
-	public string Title { get; set; }  // From V1
-	public string Owner { get; set; }  // From V2
-	public string Purpose { get; set; }   // From V3
-	public List<Actor> ActorCollection { get; set; } //New attribute   
-	public string Version = "v5";  // Update the version 
+V5 Actors 
+        public string Name { get; set; }
+        public string Age { get; set; }
+        public string Version = "v5";
+		
+V6 Actors 
+
+        public ActorName ActorName { get; set; }
+        public string Role { get; set;  }
 ````
 
 ## Changes from V4
 We have now added the following projects
-*  v5Models
+*  v6Models
    * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v1Schemas.
    * Add a reference to v2Models 
@@ -39,8 +42,10 @@ We have now added the following projects
 		* In the reference to v3Models add an Alias calling it v3Schemas.
    * Add a reference to v4Models 
 		* In the reference to v4Models add an Alias calling it v4Schemas.		
+   * Add a reference to v5Models 
+		* In the reference to v5Models add an Alias calling it v5Schemas.
 		
-*  v4Models.Tests
+*  v6Models.Tests
    * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v1Schemas.
    * Add a reference to v2Models 
@@ -51,41 +56,44 @@ We have now added the following projects
 		* In the reference to v4Models add an Alias calling it v4Schemas.	
    * Add a reference to v5Models 
 		* In the reference to v5Models add an Alias calling it v5Schemas.			
+   * Add a reference to v6Models 
+		* In the reference to v6Models add an Alias calling it v6Schemas.			
+
 
 *  Aliases
-	* Add a reference to v5Models
-		* In the reference to v5Models add an Alias calling it v4Schemas.		
+	* Add a reference to v6Models
+		* In the reference to v6Models add an Alias calling it v6Schemas.		
 
 
 And add the following  classes 
-*  v5/ProcessesController 
+*  v6/ProcessesController 
 	
 
 And add the following changes 
 *  Aliases/Startup.cs
    * In ConfigureSwagger 
-		* Appended  new c.SwaggerEndpoint("/swagger/v5.0/swagger.json", "V5"); to line 52
+		* Appended  new c.SwaggerEndpoint("/swagger/v6.0/swagger.json", "V6"); to line 52
 	* In ConfigureApiVersioning
-		* Update default version from 4.0 to 5.0
+		* Update default version from 5.0 to 6.0
    * In AddSwagger 
-	   * Preappend   new c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3"); to line 125
+	   * Preappend   new c.SwaggerEndpoint("/swagger/v6.0/swagger.json", "V6"); to line 125
 		
 
 Add External Aliases 
 *  In latest/ProcessesController 
    * At top of file 
-	   	* Add extern alias v5Schemas;
-		* Modify using v5Schemas::Schemas;
-*  In v5/ProcessesController 
+	   	* Add extern alias v6Schemas;
+		* Modify using v6Schemas::Schemas;
+*  In v6/ProcessesController 
 	* At top of file 
-	   	* Add extern alias v5Schemas;
+	   	* Add extern alias v6Schemas;
    
-*  In v5Models    
+*  In v6Models    
    * At top of file 
-	  	* Add extern alias v4Schemas;
+	  	* Add extern alias v6Schemas;
 	
 *  In testApp
-	* Add v5 Page
+	* Add v6 Page
 		* redirect to correct version of API ;
  
 
@@ -112,6 +120,10 @@ or /api/processes and provide a header with a key of api-version and a value of 
 If a client wants to use the v5 endpoint they can use 
 /api/v5/processes 
 or /api/processes and provide a header with a key of api-version and a value of 5
+
+If a client wants to use the v6 endpoint they can use 
+/api/v6/processes 
+or /api/processes and provide a header with a key of api-version and a value of 6
 
 
 In latest controller 
@@ -151,50 +163,38 @@ If the request contains the api-header key it will redirect back to that version
 if it doesnt the latest will redirect to the latest version as defined in the Startup
 
 ## Explanation of versioning in Model 
-The v5 ProcessSchema is now responsible for versioning back to the v4.  
-To do this we implement the following methods in the ProcessSchema. 
+The v6 ProcessSchema is now responsible for versioning back to the v5.  
+To do this we implement the following methods in the Actor. 
 
 
 ````
 
-        public ProcessSchema(string potentialSchema)
+         public Actor(string potentialSchema)
         {
-            var schema = JsonConvert.DeserializeObject<ProcessSchema>(potentialSchema);
+            var schema = JsonConvert.DeserializeObject<Actor>(potentialSchema);
             if (schema.Version == this.Version)
             {
-                this.Id = schema.Id;
-                this.Title = schema.Title;
-                this.Owner = schema.Owner;
-                this.Purpose = schema.Purpose;
-                this.ActorCollection = schema.ActorCollection;
+                this.ActorName = schema.ActorName;
+                this.Role = schema.Role;
             }
             else
             {
-                var previousSchema = ToPreviousVersion(potentialSchema);             
-                this.Id = previousSchema.Id;
-                this.Title = previousSchema.Title;
-                this.Owner = previousSchema.Owner;
-                this.Purpose = previousSchema.Purpose;
-                this.ActorCollection = previousSchema.Actors.Select(x => new Actor(x.ToString())).ToList<Actor>();
+                var previousSchema = ToPreviousVersion(potentialSchema);
+                this.ActorName = new ActorName() { FirstName = previousSchema.Name } ;
+                this.Role = "Default Role Added to v6";
             }
-            this.ActorCollection = this.ActorCollection != null ? this.ActorCollection : schema.ActorCollection;
-
             this.Version = schema.Version;
         }
 
-	
-	/// <summary>
-	/// Using external aliases i can convert this object into the previous verison 
-	/// </summary>
-	/// <returns></returns>
-        public v4Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
+
+        public v5Schemas.Schemas.Actor ToPreviousVersion(string schema)
         {
-            return new v4Schemas.Schemas.ProcessSchema(schema);
+            return new v5Schemas.Schemas.Actor(schema);
         }
 
 ````
-This code allows a v4 schema to accept a v1 or v2 or v3 or v4 schema string and it will return a v5 object.  
-This allows us to convert a v3 ProcessSchema into a v5 ProcessSchema 
+This code allows a v6 schema to accept a v1, v2, v3, v4 or v5 schema string and it will return a v6 object.  
+This allows us to convert a v5 ProcessSchema into a v6 ProcessSchema 
 	
 
 
@@ -306,6 +306,7 @@ The MVC has a V2 page.  If the V2 Page is loaded it has the ability to use the l
 The MVC has a V3 page.  If the V3 Page is loaded it has the ability to use the latest controller or the v3 controller 
 The MVC has a V4 page.  If the V4 Page is loaded it has the ability to use the latest controller or the v4 controller 
 The MVC has a V5 page.  If the V5 Page is loaded it has the ability to use the latest controller or the v5 controller 
+The MVC has a V6 page.  If the V6 Page is loaded it has the ability to use the latest controller or the v6 controller 
 
 
 ## Running the App
