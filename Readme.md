@@ -21,58 +21,58 @@ The ProcessSchemas object has been changed in a simple way
 ````
 	public string Id { get; set; }   // From V1 
 	public string Title { get; set; }//From V1 
-	public string Owner = "Default Owner added to V2";  //New attribute  added with default value 
-	public string Version = "v2";  // Update the version 
+	public string Owner = { get; set; }//From V2
+	public string Purpose = "Default Purpose added to V3";  //New attribute  added with default value 
+	public string Version = "v3";  // Update the version 
 	
 ````
 
 ## Changes from V1 
 We have now added the following projects
-*  v2Models
+*  v3Models
    * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v1Schemas.
+   * Add a reference to v2Models 
+		* In the reference to v2Models add an Alias calling it v2Schemas.
 *  v2Models.Test 
   * Add a reference to v1Models 
-		* In the reference to v1Models add an Alias calling it v2Schemas.
+		* In the reference to v1Models add an Alias calling it v1Schemas.
+  * Add a reference to v2Models 
+		* In the reference to v2Models add an Alias calling it v2Schemas.
 *  Aliases
-	* Add an aliase to reference v1Models 
-	* Add a reference to v2Models
-		* In the reference to v1Models add an Alias calling it v2Schemas.		
+	* Add a reference to v3Models
+		* In the reference to v3Models add an Alias calling it v3Schemas.		
 
 
 And add the following  classes 
-*  v2/ProcessesController 
+*  v3/ProcessesController 
 	
 
 And add the following changes 
 *  Aliases/Startup.cs
    * In ConfigureSwagger 
-		* Appended  new c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2"); to line 49
+		* Appended  new c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3"); to line 50
 	* In ConfigureApiVersioning
-		* Update default version from 1.0 to 2.0
+		* Update default version from 2.0 to 3.0
    * In AddSwagger 
-	   * Preappend   new c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2"); to line 120
+	   * Preappend   new c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3"); to line 122
 		
 
 Add External Aliases 
 *  In latest/ProcessesController 
    * At top of file 
-	   	* Add extern alias v2Schemas;
-		* Add extern alias v1Schemas; 
-		* Add using v2Schemas::Schemas;
-*  In v2/ProcessesController 
+	   	* Add extern alias v3Schemas;
+		* Modify using v3Schemas::Schemas;
+*  In v3/ProcessesController 
 	* At top of file 
-	   	* Add extern alias v2Schemas;
-*  In v1/ProcessesController 
-   * At top of file 
-   	* Add extern alias v1Schemas;
+	   	* Add extern alias v3Schemas;
    
-*  In v2Models    
+*  In v3Models    
    * At top of file 
-	  	* Add extern alias v1Schemas;
+	  	* Add extern alias v2Schemas;
 	
 *  In testApp
-	* Add v2 Page
+	* Add v3 Page
 		* redirect to correct version of API ;
  
 
@@ -121,41 +121,46 @@ If the request contains the api-header key it will redirect back to that version
 if it doesnt the latest will redirect to the latest version as defined in the Startup
 
 ## Explanation of versioning in Model 
-The v2 ProcessSchema is now responsible for versioning back to the v1.  
+The v3 ProcessSchema is now responsible for versioning back to the v2.  
 To do this we implement the following methods in the ProcessSchema. 
 
 
 ````
-	public ProcessSchema(string potentialSchema)
-    {
-		var schema = JsonConvert.DeserializeObject<ProcessSchema>(potentialSchema);
-		if (schema.Version == this.Version)
-		{
-			this.Id = schema.Id;
-			this.Title = schema.Title;
-		}   
-		else
-		{
-			var previousSchema = ToPreviousVersion(potentialSchema);
-			this.Id = previousSchema.Id;
-			this.Title = previousSchema.Title;
-		}
-		this.Owner = schema.Owner;
-		this.Version = schema.Version;
-	}
+
+        public ProcessSchema(string potentialSchema)
+        {
+            var schema = JsonConvert.DeserializeObject<ProcessSchema>(potentialSchema);
+            if (schema.Version == this.Version)
+            {
+                this.Id = schema.Id;
+                this.Title = schema.Title;
+                this.Owner = schema.Owner;
+            }
+            else
+            {
+                var previousSchema = ToPreviousVersion(potentialSchema);
+                this.Id = previousSchema.Id;
+                this.Title = previousSchema.Title;
+                this.Owner = previousSchema.Owner;
+            }
+
+            this.Purpose = schema.Purpose;
+            this.Version = schema.Version;
+        }
+
 	
 	/// <summary>
 	/// Using external aliases i can convert this object into the previous verison 
 	/// </summary>
 	/// <returns></returns>
-	public v1Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
-	{
-		return new v1Schemas.Schemas.ProcessSchema(schema);
-	}
+        public v2Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
+        {
+            return new v2Schemas.Schemas.ProcessSchema(schema);
+        }
 
 ````
-This code allows a v2 schema to accept a v1 schema string or a v2 schema string and it will return a v2 object.  
-This allows us to convert a v1 ProcessSchema into a v2 ProcessSchema 
+This code allows a v3 schema to accept a v1 schema string or a v2 schema string and it will return a v3 object.  
+This allows us to convert a v2 ProcessSchema into a v3 ProcessSchema 
 	
 
 
@@ -264,6 +269,7 @@ A MVC test app has been created to demonstrate the API.
 
 The MVC has a V1 page.  If the V1 Page is loaded it has the ability to use the latest controller or the v1 controller 
 The MVC has a V2 page.  If the V2 Page is loaded it has the ability to use the latest controller or the v2 controller 
+The MVC has a V3 page.  If the V2 Page is loaded it has the ability to use the latest controller or the v3 controller 
 
 
 ## Running the App
