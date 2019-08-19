@@ -16,7 +16,7 @@ Its a simple web api project which sets up
 API versioning
 Swagger endpoints 
 
-## Behavioural Differences in V2
+## Behavioural Differences in V3
 The ProcessSchemas object has been changed in a simple way 
 ````
 	public string Id { get; set; }   // From V1 
@@ -83,6 +83,15 @@ There is two ways to redirect clients to the correct API.
 If a client wants to use the v1 endpoint they can use 
 /api/v1/processes 
 or /api/processes and provide a header with a key of api-version and a value of 1 
+
+If a client wants to use the v2 endpoint they can use 
+/api/v2/processes 
+or /api/processes and provide a header with a key of api-version and a value of 2
+
+If a client wants to use the v3 endpoint they can use 
+/api/v3/processes 
+or /api/processes and provide a header with a key of api-version and a value of 3
+
 
 In latest controller 
 ````
@@ -269,7 +278,7 @@ A MVC test app has been created to demonstrate the API.
 
 The MVC has a V1 page.  If the V1 Page is loaded it has the ability to use the latest controller or the v1 controller 
 The MVC has a V2 page.  If the V2 Page is loaded it has the ability to use the latest controller or the v2 controller 
-The MVC has a V3 page.  If the V2 Page is loaded it has the ability to use the latest controller or the v3 controller 
+The MVC has a V3 page.  If the V3 Page is loaded it has the ability to use the latest controller or the v3 controller 
 
 
 ## Running the App
