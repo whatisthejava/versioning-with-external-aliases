@@ -3,6 +3,20 @@
 
 # Readme
 
+## Using this repo 
+This repo has several branches 
+V1 - V6 and a master.  Master is tracking the v6 branch currently. 
+
+This repo has been set up to demonstrate how you can do model versioning within dot net core using the feature external-aliases.
+
+Id recommend checking out v1 and running it 
+then v2 and see how the API handles V1 and V2 objects 
+then continue up to the final version.
+
+Please report any bugs or features or any general feedback is welcome 
+
+
+
 ## Introduction
 This git repo has been written to demonstrate a strategy for model versioning within an versioned API. 
 
