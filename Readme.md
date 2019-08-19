@@ -69,15 +69,21 @@ v1/ProcessesControllers  which has three endpoints
 The latest controller has the following endpoints 
 ````
 [HttpGet] 
-	public ActionResult<List<ProcessSchema>> Get()
+	public ActionResult<List<ProcessSchema>> LatestGet()
  
 	[HttpGet]
 	[Route("{id}")]
-    public ActionResult<ProcessSchema> GetById(string id)
+    public ActionResult<ProcessSchema> LatestGetById(string id)
 	
+    /// <summary>
+	/// The reason this accepts a jsonResult is if in future we change the schema significantly we need to be able to still accept this version of the schema 
+	/// </summary>
+	/// <param name="jsonResult"></param>
+	/// <returns></returns>
 	[HttpPost]
-    public ActionResult Write([FromBody] JObject jsonResult)
+    public ActionResult LatestWrite([FromBody] JObject jsonResult)
 ````
+
 
 The latest controller will redirect calls back to a specified API if a header of api-version is passed to it 
 If no header is passed then the latest controller will redirect to the latest version of the API as specified in the API configuration 
@@ -95,3 +101,15 @@ appsettings.json
 
 ### Test App
 A MVC test app has been created to demonstrate the API.
+
+The MVC has a V1 page.  If the V1 Page is loaded it has the ability to use the latest controller or the v1 controller 
+
+### Running the App
+Download the code 
+Open in Visual Studio
+Make The solution a multi start project 
+Run 
+
+The API will open in Swagger 
+
+The Test App will open on the index page. 
