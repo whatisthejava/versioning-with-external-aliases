@@ -1,0 +1,105 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "V3";
+}
+
+
+<script>
+
+    function getContentsOfBodyLatest() {
+        return "{  \"id\": \"" + $("#id").val() + "\", \"title\": \"" + $("#title").val() + "\", \"owner\": \"" + $("#owner").val() + "\", \"purpose\": \"" + $("#purpose").val() + "\"}";
+    }
+
+    function getContentsOfBodyVersion() {
+
+        return "{  \"id\": \"" + $("#id-2").val() + "\", \"title\": \"" + $("#title-2").val() + "\", \"owner\": \"" + $("#owner-2").val() + "\", \"purpose\": \"" + $("#purpose-2").val() + "\"}";
+    }
+
+
+    var latestAPI = 'https://localhost:44376/api/processes';
+    var versionedApi = 'https://localhost:44376/api/v3/processes';
+</script>
+
+<div class="text-center">
+    <h1 class="display-4">V3 (ProcessSchema) </h1>
+    <p>
+        This is the third iteration of the object<br />
+        we have added a purpose atribute<br />
+        It consists of fourattributes<br />
+        Id : The id of the process<br />
+        Title: The title of the process<br />
+        Owner: The owner of the process<br />
+        Purpose: The purpose of the process<br />
+        SchemaVersion : The version of the schema (is hard coded)<br />
+    </p>
+
+    <div class="col-md-12 row">
+        <div class="shadow border col-md-4">
+
+            <p class="display-4">API latest </p>
+
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Get By Id" onclick="get(latestAPI, '3', true, '#id-to-request')" /></div>
+                    <div class="col-md-8"><input type="text" id="id-to-request" name="id-to-request" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="GetAll" onclick="getAll(latestAPI, '3', true)" /></div>
+                </div>
+            </div>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Write" onclick="writeX(latestAPI, '3', true, getContentsOfBodyLatest)" /></div>
+                    <div class=" col-md-8">&nbsp;</div>
+                    <div class=" col-md-8"><input type="text" id="id" name="id" placeholder="id" /></div>
+                    <div class=" col-md-8"><input type="text" id="title" name="title" placeholder="title" /></div>
+                    <div class=" col-md-8"><input type="text" id="owner" name="owner" placeholder="owner" /></div>
+                    <div class=" col-md-8"><input type="text" id="purpose" name="purpose" placeholder="purpose" /></div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="shadow border col-md-4">
+            <pre id="result" name="result" class="text-left"></pre>
+        </div>
+
+
+        <p></p>
+
+        <div class="shadow border col-md-4">
+
+            <p class="display-4">API V3</p>
+
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Get By Id" onclick="get(versionedApi, null, false, '#id-to-request-2')" /></div>
+                    <div class="col-md-8"><input type="text" id="id-to-request-2" name="id-to-request" /></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="GetAll" onclick="getAll(versionedApi, null, false)" /></div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group row">
+                    <div class="col-md-4"><input type="button" value="Write" onclick="writeX(versionedApi, null, false, getContentsOfBodyVersion)" /></div>
+                    <div class=" col-md-8">&nbsp;</div>
+                    <div class=" col-md-8"><input type="text" id="id-2" name="id-2" placeholder="id" /></div>
+                    <div class=" col-md-8"><input type="text" id="title-2" name="title-2" placeholder="title" /></div>
+                    <div class=" col-md-8"><input type="text" id="owner-2" name="owner-2" placeholder="owner" /></div>
+                    <div class=" col-md-8"><input type="text" id="purpose-2" name="purpose-2" placeholder="purpose" /></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/js/calls.js"></script>
