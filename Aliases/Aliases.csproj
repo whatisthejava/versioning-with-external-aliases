@@ -22,6 +22,9 @@
     <ProjectReference Include="..\v2Models\v2Models.csproj">
       <Aliases>v2Schemas</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\v3Models\v3Models.csproj">
+      <Aliases>v3Schemas</Aliases>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>
