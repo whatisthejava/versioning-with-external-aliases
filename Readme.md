@@ -50,6 +50,23 @@ and the following methods
 	}
 ````
 
+The other model is in project StorageRepository 
+The StorageModel.cs is outlined below 
+
+````
+    public class StorageModel
+    {
+        public string Id { get; set; }
+        public string Contents { get; set; }
+        public int VersionOfContents { get; set; }
+	}
+	
+````
+This model has three atributes. 
+Id - The unique id of the model 
+The Contents - The ProcessSchema model is serialized using JSON and written here.  Wrapping it in the StorageModel allows us more flexibility when reading and writing
+VersionOfContents - The version of the schema 
+
 ### Controllers
 At this point we have two controllers
 v1/ProcessesControllers  which has three endpoints 
