@@ -40,7 +40,7 @@ We have now added the following projects
    * Add a reference to v4Models 
 		* In the reference to v4Models add an Alias calling it v4Schemas.		
 		
-*  v4Models.Tests
+*  v5Models.Tests
    * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v1Schemas.
    * Add a reference to v2Models 
@@ -68,7 +68,7 @@ And add the following changes
 	* In ConfigureApiVersioning
 		* Update default version from 4.0 to 5.0
    * In AddSwagger 
-	   * Preappend   new c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3"); to line 125
+	   * Preappend   new c.SwaggerEndpoint("/swagger/v5.0/swagger.json", "V5"); to line 125
 		
 
 Add External Aliases 
@@ -193,7 +193,7 @@ To do this we implement the following methods in the ProcessSchema.
         }
 
 ````
-This code allows a v4 schema to accept a v1 or v2 or v3 or v4 schema string and it will return a v5 object.  
+This code allows a v5 API to accept a v1 or v2 or v3 or v4 schema string and it will return a v5 object.  
 This allows us to convert a v3 ProcessSchema into a v5 ProcessSchema 
 	
 
