@@ -9,7 +9,7 @@ This git repo has been written to demonstrate a strategy for model versioning wi
 The project has been set up to allow v1 clients to continue using older API's without being forced to update.  
 The models and the latest controller will allow older clients to continue to use the older API without being forced to update. 
 
-This version is v2. 
+This version is v3. 
 
 Its a simple web api project which sets up 
 
@@ -23,6 +23,7 @@ The ProcessSchemas object has been changed in a simple way
 	public string Title { get; set; }//From V1 
 	public string Owner = "Default Owner added to V2";  //New attribute  added with default value 
 	public string Version = "v2";  // Update the version 
+	
 ````
 
 ## Changes from V1 
