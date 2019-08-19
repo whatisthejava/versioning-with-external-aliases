@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿extern alias v1Schemas;
+
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Schemas;
 using StorageRepository;
 using System.Collections.Generic;
 using System.Linq;
+using v1Schemas::Schemas;
 
 namespace Aliases.Controllers.v1
 {

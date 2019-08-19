@@ -17,7 +17,10 @@
   <ItemGroup>
     <ProjectReference Include="..\StorageRepository\StorageRepository.csproj" />
     <ProjectReference Include="..\v1Models\v1Models.csproj">
-      <Aliases></Aliases>
+      <Aliases>v1Schemas</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\v2Models\v2Models.csproj">
+      <Aliases>v2Schemas</Aliases>
     </ProjectReference>
   </ItemGroup>
 
