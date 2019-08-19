@@ -81,7 +81,12 @@ There is two ways to redirect clients to the correct API.
 
 If a client wants to use the v1 endpoint they can use 
 /api/v1/processes 
-or /api/processes and provide a header with a key of api-version and a value of 1 
+or /api/processes and provide a header with a key of api-version and a value of 1
+
+
+If a client wants to use the v2 endpoint they can use 
+/api/v2/processes 
+or /api/processes and provide a header with a key of api-version and a value of 2
 
 In latest controller 
 ````
