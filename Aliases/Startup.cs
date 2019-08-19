@@ -122,7 +122,7 @@ namespace Aliases
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v4.0/swagger.json", "V5");
+                c.SwaggerEndpoint("/swagger/v5.0/swagger.json", "V5");
                 c.SwaggerEndpoint("/swagger/v4.0/swagger.json", "V4");
                 c.SwaggerEndpoint("/swagger/v3.0/swagger.json", "V3");
                 c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2");
