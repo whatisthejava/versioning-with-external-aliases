@@ -1,5 +1,6 @@
 
 
+
 # Readme
 
 ## Introduction
@@ -43,23 +44,23 @@ And add the following changes
 Add External Aliases 
 *  In latest/ProcessesController 
    * At top of file 
-   	* Add extern alias v2Schemas;
-	* Add extern alias v1Schemas; 
-	* Add using v2Schemas::Schemas;
+	   	* Add extern alias v2Schemas;
+		* Add extern alias v1Schemas; 
+		* Add using v2Schemas::Schemas;
 *  In v2/ProcessesController 
-   * At top of file 
-   	* Add extern alias v2Schemas;
+	* At top of file 
+	   	* Add extern alias v2Schemas;
 *  In v1/ProcessesController 
    * At top of file 
    	* Add extern alias v1Schemas;
    
 *  In v2Models    
    * At top of file 
-  	* Add extern alias v1Schemas;
+	  	* Add extern alias v1Schemas;
 	
 *  In testApp
-   * Add v2 Page  
-   	* redirect to correct version of API ;
+	* Add v2 Page
+		* redirect to correct version of API ;
  
 
    
