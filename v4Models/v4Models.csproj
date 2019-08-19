@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\v1Models\v1Models.csproj">
+      <Aliases>v1Schemas</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\v2Models\v2Models.csproj">
+      <Aliases>v2Schemas</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\v3Models\v3Models.csproj">
+      <Aliases>v3Schemas</Aliases>
+    </ProjectReference>
+  </ItemGroup>
+
+</Project>
