@@ -1,3 +1,5 @@
+
+
 # Readme
 
 ## Introduction
@@ -6,29 +8,155 @@ This git repo has been written to demonstrate a strategy for model versioning wi
 The project has been set up to allow v1 clients to continue using older API's without being forced to update.  
 The models and the latest controller will allow older clients to continue to use the older API without being forced to update. 
 
-This version is v1. 
-
-It has no versioning yet
+This version is v2. 
 
 Its a simple web api project which sets up 
 
 API versioning
 Swagger endpoints 
-and the idea of a latest controller and v1 controllers 
 
 
-### API versioning 
+## Changes from V1 
+We have now added the following projects
+*  v2Models
+   * Add a reference to v1Models 
+		* In the reference to v1Models add an Alias calling it v1Schemas.
+*  v2Models.Test 
+  * Add a reference to v1Models 
+		* In the reference to v1Models add an Alias calling it v2Schemas.
+
+
+And add the following  classes 
+*  v2/ProcessesController 
+	
+
+And add the following changes 
+*  Aliases/Startup.cs
+   * In ConfigureSwagger 
+		* Appended  new c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2"); to line 49
+	* In ConfigureApiVersioning
+		* Update default version from 1.0 to 2.0
+   * In AddSwagger 
+	   * Preappend   new c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2"); to line 120
+		
+
+Add External Aliases 
+*  In latest/ProcessesController 
+   * At top of file 
+   	* Add extern alias v2Schemas;
+	* Add extern alias v1Schemas; 
+	* Add using v2Schemas::Schemas;
+*  In v2/ProcessesController 
+   * At top of file 
+   	* Add extern alias v2Schemas;
+*  In v1/ProcessesController 
+   * At top of file 
+   	* Add extern alias v1Schemas;
+   
+*  In v2Models    
+   * At top of file 
+  	* Add extern alias v1Schemas;
+	
+*  In testApp
+   * Add v2 Page  
+   	* redirect to correct version of API ;
+ 
+
+   
+## Explanation of versioning in API 
+There is two ways to redirect clients to the correct API.
+
+If a client wants to use the v1 endpoint they can use 
+/api/v1/processes 
+or /api/processes and provide a header with a key of api-version and a value of 1 
+
+In latest controller 
+````
+        [HttpGet]
+        public ActionResult<List<ProcessSchema>> LatestGet()
+        {
+            if (Request.ContainsApiVersion())
+            {
+                return Redirect($"/api/v{Request.GetApiVersion()}/processes");
+            }
+            return Redirect($"/api/v{CurrentVersionOfApiToMapTo}/processes");
+        }				
+		
+		And the post 
+		
+        /// <summary>
+        /// The reason this accepts a jsonResult is if in future we change the schema significantly we need to be able to still accept this version of the schema 
+        /// </summary>
+        /// <param name="jsonResult"></param>
+        /// <returns></returns>
+        [HttpPost]
+        public ActionResult LatestWrite([FromBody] JObject jsonResult)
+        {
+            int version = CurrentVersionOfApiToMapTo;
+            int.TryParse(Request.GetApiVersion(), out version);
+
+            jsonResult["version"] = $"v{version}";
+            var processSchema = new ProcessSchema(JsonConvert.SerializeObject(jsonResult));
+
+            _repo.Write(new v1StorageModel.StorageModel() { Id = processSchema.Id, VersionOfContents = version, Contents = JsonConvert.SerializeObject(jsonResult) });
+            return Ok();
+        }
+````
+
+If the request contains the api-header key it will redirect back to that version 
+if it doesnt the latest will redirect to the latest version as defined in the Startup
+
+## Explanation of versioning in Model 
+The v2 ProcessSchema is now responsible for versioning back to the v1.  
+To do this we implement the following methods in the ProcessSchema. 
+
+
+````
+	public ProcessSchema(string potentialSchema)
+    {
+		var schema = JsonConvert.DeserializeObject<ProcessSchema>(potentialSchema);
+		if (schema.Version == this.Version)
+		{
+			this.Id = schema.Id;
+			this.Title = schema.Title;
+		}   
+		else
+		{
+			var previousSchema = ToPreviousVersion(potentialSchema);
+			this.Id = previousSchema.Id;
+			this.Title = previousSchema.Title;
+		}
+		this.Owner = schema.Owner;
+		this.Version = schema.Version;
+	}
+	
+	/// <summary>
+	/// Using external aliases i can convert this object into the previous verison 
+	/// </summary>
+	/// <returns></returns>
+	public v1Schemas.Schemas.ProcessSchema ToPreviousVersion(string schema)
+	{
+		return new v1Schemas.Schemas.ProcessSchema(schema);
+	}
+
+````
+This code allows a v2 schema to accept a v1 schema string or a v2 schema string and it will return a v2 object.  
+This allows us to convert a v1 ProcessSchema into a v2 ProcessSchema 
+	
+
+
+## API versioning 
 Api versioning  is configured via Startup.ConfigureApiVersioning
 We use a custom API version Reader which reads the version out the URL path.  
 
-### Swagger has been set up to work with API versioning 
+## Swagger has been set up to work with API versioning 
 ### Documentation on external aliases 
 [Microsoft Docs](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/keywords/extern-alias)
 [Stack Overflow ](https://stackoverflow.com/questions/2347260/when-must-we-use-extern-alias-keyword-in-c) - Someone has suggested this for versioning, although i cant find any one trying it.
 [Walkthough from 2006](https://blogs.msdn.microsoft.com/ansonh/2006/09/27/extern-alias-walkthrough/) - Yes its that old. 
 [Scott Hansellman blog](https://www.hanselman.com/blog/ASPNETCoreRESTfulWebAPIVersioningMadeEasy.aspx) - Versioning isnt this easy 
 
-### Models 
+## Models 
 The Models project contains a single simple POCO named ProcessSchema.
 
 This is the object we will be adding version control to.  
@@ -50,7 +178,9 @@ and the following methods
 	}
 ````
 
-### Controllers
+
+
+## Controllers
 At this point we have two controllers
 v1/ProcessesControllers  which has three endpoints 
 
@@ -89,7 +219,7 @@ The latest controller will redirect calls back to a specified API if a header of
 If no header is passed then the latest controller will redirect to the latest version of the API as specified in the API configuration 
 
 
-### Notes
+## Notes
 This isnt set up to work with a databae, it uses a folder on your computer.  It can be set in 
 
 appsettings.json 
@@ -99,12 +229,12 @@ appsettings.json
     "PathToDb": "/Development/Temp/"
 ````
 
-### Test App
+## Test App
 A MVC test app has been created to demonstrate the API.
 
 The MVC has a V1 page.  If the V1 Page is loaded it has the ability to use the latest controller or the v1 controller 
 
-### Running the App
+## Running the App
 Download the code 
 Open in Visual Studio
 Make The solution a multi start project 

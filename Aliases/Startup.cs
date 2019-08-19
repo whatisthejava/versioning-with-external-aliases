@@ -46,7 +46,9 @@ namespace Aliases
 
 
                 c.SwaggerDoc("v1.0", new Info { Version = "v1.0", Title = "V1", Description = "V1 Endpoints", TermsOfService = "None", Contact = contact });
-             
+                c.SwaggerDoc("v2.0", new Info { Version = "v2.0", Title = "V2", Description = "V1 Endpoints", TermsOfService = "None", Contact = contact });
+
+
                 c.DocInclusionPredicate((docName, apiDesc) =>
                 {
                     var actionApiVersionModel = apiDesc.ActionDescriptor?.GetApiVersion();
@@ -115,6 +117,7 @@ namespace Aliases
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
+                c.SwaggerEndpoint("/swagger/v2.0/swagger.json", "V2");
                 c.SwaggerEndpoint("/swagger/v1.0/swagger.json", "V1");
             });
         }
