@@ -1,4 +1,5 @@
-﻿extern alias v5Schemas;
+﻿extern alias v6Schemas;
+extern alias v5Schemas;
 extern alias v4Schemas;
 extern alias v3Schemas;
 extern alias v2Schemas;
@@ -11,7 +12,7 @@ using Microsoft.Extensions.Options;
 using StorageRepository;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
-using v5Schemas::Schemas;
+using v6Schemas::Schemas;
 
 namespace Aliases.Controllers.latest
 {
