@@ -34,7 +34,7 @@ We have now added the following projects
 		* In the reference to v1Models add an Alias calling it v1Schemas.
    * Add a reference to v2Models 
 		* In the reference to v2Models add an Alias calling it v2Schemas.
-*  v2Models.Test 
+*  v3Models.Test 
   * Add a reference to v1Models 
 		* In the reference to v1Models add an Alias calling it v1Schemas.
   * Add a reference to v2Models 
